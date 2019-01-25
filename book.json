@@ -1,0 +1,23 @@
+{
+	"author":"邓军振",
+	"plugins": ["splitter","toggle-chapters","donate","navigator"],
+	"pluginsConfig": {
+    "donate": {
+        "wechat": "http://r.photo.store.qq.com/psb?/V13YsMXk2HrQPW/i7DU81kX*K*jPUqjeaRWXoecAs1PwqCLGahEogbX5xQ!/r/dDIBAAAAAAAA",
+        "alipay": "http://r.photo.store.qq.com/psb?/V13YsMXk2HrQPW/UJl0EVVoGzsYASyt.Ml70Q4FFKVRh6*YrazGhIFIGrA!/r/dGcBAAAAAAAA",
+        "title": "",
+        "button": "赏",
+        "alipayText": "支付宝",
+        "wechatText": "微信"
+    }
+	},
+	"links": {
+	"gitbook": false,
+	"sharing": {
+		 "google": false,
+		 "facebook": false,
+		 "twitter": false,
+		 "all": false
+	 }
+ }
+}
