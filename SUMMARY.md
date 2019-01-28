@@ -27,6 +27,7 @@
   * [Redis9: GeoHash](cache/redis9-geohash.md)
   * [Redis10: Scan](cache/redis10-scan.md)
   * [Redis11: IO](cache/redis11-io.md)
+  * [Redis12: 通信协议](cache/redis12-protocol.md)
   * [选redis还是memcache，源码怎么说？](cache/redis-memcache-source.md)
   * [缓存，你真的用对了吗？](cache/cache-is-right.md)
   * [缓存，究竟是淘汰，还是修改？](cache/obsolete-or-delete.md)
