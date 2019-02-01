@@ -32,6 +32,8 @@
   * [Redis14: 管道(pipeline)](cache/redis14-pipeline.md)
   * [Redis15: 事务](cache/redis15-transaction.md)
   * [Redis16: 发布订阅](cache/redis16-pubsub.md)
+  * [Redis17: ziplist](cache/redis17-ziplist.md)
+  * [Redis18: 主从同步](cache/redis18-master-slave.md)
   * [选redis还是memcache，源码怎么说？](cache/redis-memcache-source.md)
   * [缓存，你真的用对了吗？](cache/cache-is-right.md)
   * [缓存，究竟是淘汰，还是修改？](cache/obsolete-or-delete.md)
