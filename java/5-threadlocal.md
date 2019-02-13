@@ -1,10 +1,10 @@
 
-# ThreadLocal
+# `ThreadLocal`
 ---
 
 
 
-## ThreadLocal是什么 ？
+## `ThreadLocal`是什么 ？
 ---
 `ThreadLocal`是线程局部变量，和普通变量的不同在于：**每个线程持有这个变量的一个副本，可以独立修改(set方法)和访问(get方法)这个变量，并且线程之间不会发生冲突。`ThreadLocal`一般会被`private static`修饰**
 
@@ -17,13 +17,13 @@
 + `remove()`：移除变量在当前线程的值
 + `set(T value)`：设置变量在当前线程的值  
 
-除了这4个方法，ThreadLocal内部还有一个静态内部类ThreadLocalMap，该内部类才是实现线程隔离机制的关键，get()、set()、remove()都是基于该内部类操作。ThreadLocalMap提供了一种用键值对方式存储每一个线程的变量的方法，key为当前ThreaddLocal对象，value则是对应线程的变量副本。
+除了这4个方法，`ThreadLocal`内部还有一个静态内部类`ThreadLocalMap`，该内部类才是实现线程隔离机制的关键，`get()`、`set()`、`remove()`都是基于该内部类操作。`ThreadLocalMap`提供了一种用键值对方式存储每一个线程的变量的方法，key为当前`ThreaddLocal`对象，`value`则是对应线程的变量副本。
 
 对于ThreadLocal需要注意的有亮点：
-+ ThreadLocal示例本身不存储值，它只是提供了一个在当前线程中找到副本值的key
-+ 是ThreadLocal包含在Thread中，而不是Thread包含在ThreadLocal中
++ `ThreadLocal`示例本身不存储值，它只是提供了一个在当前线程中找到副本值的key
++ 是`ThreadLocal`包含在`Thread`中，而不是`Thread`包含在`ThreadLocal`中
 
-下图是Thread、ThreadLocal、ThreadLocalMap的关系：
+下图是`Thread`、`ThreadLocal`、`ThreadLocalMap`的关系：
 
 ![PNG](images/5-threadlocal-1.png)
 
@@ -95,13 +95,13 @@ Process finished with exit code 0
 ```
 从运行结果可以看出，ThreadLocal确实可以达到线程隔离机制，确保变量的安全性。
 
-## ThreadLocal源码解析
+## `ThreadLocal`源码解析
 ---
-ThreadLocal虽然解决了多线程变量的复杂问题，但是它的源码却是比较简单的。ThreadLocalMap是实现ThreadLocal的关键。
+`ThreadLocal`虽然解决了多线程变量的复杂问题，但是它的源码却是比较简单的。`ThreadLocalMap`是实现`ThreadLocal`的关键。
 
-### ThreadLocalMap
+### `ThreadLocalMap`
 ---
-ThreadLocalMap内部利用Entry来实现key-value的存储，如下：
+`ThreadLocalMap`内部利用Entry来实现key-value的存储，如下：
 ```
 /**
 * The entries in this hash map extend WeakReference, using
