@@ -15,6 +15,7 @@
   * [Java虚拟机2：基本垃圾回收算法有哪些？](java/jvm2-gc.md)
   * [Java虚拟机3：Java GC如何判断对象是否为垃圾?](java/jvm3-garbage-decide.md)
   * [Java虚拟机4: 分代垃圾回收](java/jvm4-gc-generation.md)
+  * [ThreadLocal](java/5-threadlocal.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
