@@ -121,9 +121,9 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
     }
 }
 ```
-从上面代码中可以看出，Entry的key就是ThreadLocal，而value就是值。同时，Entry也继承WeakReference，所以说Entry所对应的key（ThreadLocal实例）的引用为一个弱引用。
+从上面代码中可以看出，`Entry`的`key`就是`ThreadLocal`，而`value`就是值。同时，`Entry`也继承`WeakReference`，所以说`Entry`所对应的`key`（ThreadLocal实例）的引用为一个弱引用。
 
-ThreadLocalMap的源码稍微多了点，这里只看两个最核心的方法getEntry()、set(ThreadLocal key, Object value):  
+`ThreadLocalMap`的源码稍微多了点，这里只看两个最核心的方法`getEntry()`、`set(ThreadLocal key, Object value)`:  
 
 **`set(ThreadLocal key, Object value)`**
 
@@ -177,9 +177,233 @@ private void set(ThreadLocal<?> key, Object value) {
         rehash();
 }
 ```
+这个`set()`操作和`Map`中的`put()`方式有点不一样，虽然它们都是key、value结构，不同在于它们解决散列冲突的方式不一样。集合`Map`的`put()`采用的是拉链法，而`ThreadLocalMap`的`set()`则是采用开放定址法。
+
+`set()`操作除了存储元素外，还有一个很重要的作用，就是`replaceStaleEntry()`和`cleanSomeSlots()`，这两个方法可以清除掉`key==null`的实例，防止内存泄漏。在`set()`方法中还有一个变量很重要：`threadLocalHashCode`，定义如下：
+```
+private final int threadLocalHashCode = nextHashCode();
+```
+从名字上我们可以看出，`threadLocalHashCode`应该是`ThreadLocal`的散列值，定义为final，表示`ThreadLocal`一旦创建其散列值就已经确定了，生成过程则是调用`nextHashCode()`：
+```
+/**
+    * The next hash code to be given out. Updated atomically. Starts at
+    * zero.
+    */
+private static AtomicInteger nextHashCode =
+    new AtomicInteger();
+
+/**
+    * The difference between successively generated hash codes - turns
+    * implicit sequential thread-local IDs into near-optimally spread
+    * multiplicative hash values for power-of-two-sized tables.
+    */
+private static final int HASH_INCREMENT = 0x61c88647;
+
+/**
+    * Returns the next hash code.
+    */
+private static int nextHashCode() {
+    return nextHashCode.getAndAdd(HASH_INCREMENT);
+}
+```
+`nextHashCode`表示分配下一个`ThreaddLocal`实例的`threadLocalHashCode`的值，`HASH_INCREMENT`则表示分配两个`ThreadLocal`实例的`threadLocalHashCode`的增量，从`nextHashCode()`就可以看出它们的定义。
+
+**getEntry()**  
+```
+/**
+    * Get the entry associated with key.  This method
+    * itself handles only the fast path: a direct hit of existing
+    * key. It otherwise relays to getEntryAfterMiss.  This is
+    * designed to maximize performance for direct hits, in part
+    * by making this method readily inlinable.
+    *
+    * @param  key the thread local object
+    * @return the entry associated with key, or null if no such
+    */
+private Entry getEntry(ThreadLocal<?> key) {
+    int i = key.threadLocalHashCode & (table.length - 1);
+    Entry e = table[i];
+    if (e != null && e.get() == key)
+        return e;
+    else
+        return getEntryAfterMiss(key, i, e);
+}
+```
+由于采用了开放定址法，所以当前key的散列值和元素在数组的索引并不是完全对应的。首先取一个探测数（key的散列值），如果所对应的key就是我们所要找的元素，则返回，否则调用`getEntryAfterMiss()`，如下：
+```
+/**
+    * Version of getEntry method for use when key is not found in
+    * its direct hash slot.
+    *
+    * @param  key the thread local object
+    * @param  i the table index for key's hash code
+    * @param  e the entry at table[i]
+    * @return the entry associated with key, or null if no such
+    */
+private Entry getEntryAfterMiss(ThreadLocal<?> key, int i, Entry e) {
+    Entry[] tab = table;
+    int len = tab.length;
+
+    while (e != null) {
+        ThreadLocal<?> k = e.get();
+        if (k == key)
+            return e;
+        if (k == null)
+            expungeStaleEntry(i);
+        else
+            i = nextIndex(i, len);
+        e = tab[i];
+    }
+    return null;
+}
+```
+这里有一个重要的地方，当`key == null`时，调用了`expungeStaleEntry()`方法，该方法用于处理`key == null`，有利于GC回收，能够有效地避免内存泄漏。
+
+**`get()`**  
+返回当前线程所对应的线程变量。
+```
+    /**
+     * Returns the value in the current thread's copy of this
+     * thread-local variable.  If the variable has no value for the
+     * current thread, it is first initialized to the value returned
+     * by an invocation of the {@link #initialValue} method.
+     *
+     * @return the current thread's value of this thread-local
+     */
+    public T get() {
+        // 获取当前线程
+        Thread t = Thread.currentThread();
+
+        // 获取当前线程的成员变量threadLocal
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+
+            // 从当前程程的ThreadLocalMap获取相对应的Entry
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                // 获取目标值
+                T result = (T)e.value;
+                return result;
+            }
+        }
+        return setInitialValue();
+    }
+```
+首先通过当前线程获取所对应的成员变量`ThreadLocalMap`，然后通过`ThreadLocalMap`获取当前`ThreadLocal`的`Entry`，最后通过所获取的`Entry`获取目标值value。
+
+`getMap()`方法可以获取当前线程所对应的`ThreadLocalMap`，如下：
+```
+/**
+    * Get the map associated with a ThreadLocal. Overridden in
+    * InheritableThreadLocal.
+    *
+    * @param  t the current thread
+    * @return the map
+    */
+ThreadLocalMap getMap(Thread t) {
+    return t.threadLocals;
+}
+```
+
+**`set(T value)`**  
+设置当前线程的线程局部变量的值。  
+```
+/**
+    * Sets the current thread's copy of this thread-local variable
+    * to the specified value.  Most subclasses will have no need to
+    * override this method, relying solely on the {@link #initialValue}
+    * method to set the values of thread-locals.
+    *
+    * @param value the value to be stored in the current thread's copy of
+    *        this thread-local.
+    */
+public void set(T value) {
+    Thread t = Thread.currentThread();
+    ThreadLocalMap map = getMap(t);
+    if (map != null)
+        map.set(this, value);
+    else
+        createMap(t, value);
+}
+```
+获取当前线程所对应的`ThreadLocalMap`，如果不为空，则调用`ThreadLocalMap`的`set()`方法，key就是当前`ThreadLocal`；如果不存在，就调用`createMap()`方法新建一个，如下：
+```
+/**
+    * Create the map associated with a ThreadLocal. Overridden in
+    * InheritableThreadLocal.
+    *
+    * @param t the current thread
+    * @param firstValue value for the initial entry of the map
+    */
+void createMap(Thread t, T firstValue) {
+    t.threadLocals = new ThreadLocalMap(this, firstValue);
+}
+```
+
+**`initValue()`**  
+返回该线程局部变量的初始值。  
+```
+/**
+    * Returns the current thread's "initial value" for this
+    * thread-local variable.  This method will be invoked the first
+    * time a thread accesses the variable with the {@link #get}
+    * method, unless the thread previously invoked the {@link #set}
+    * method, in which case the {@code initialValue} method will not
+    * be invoked for the thread.  Normally, this method is invoked at
+    * most once per thread, but it may be invoked again in case of
+    * subsequent invocations of {@link #remove} followed by {@link #get}.
+    *
+    * <p>This implementation simply returns {@code null}; if the
+    * programmer desires thread-local variables to have an initial
+    * value other than {@code null}, {@code ThreadLocal} must be
+    * subclassed, and this method overridden.  Typically, an
+    * anonymous inner class will be used.
+    *
+    * @return the initial value for this thread-local
+    */
+protected T initialValue() {
+    return null;
+}
+```
+该方法定义为`protected`级别且返回为`null`，很明显是要子类实现它的，所以我们在使用`ThreadLocal`的时候一般都应该覆盖该方法。该方法不能显示调用，只有在第一次调用`get()`或者`set()`方法时才会被执行，并且仅执行1次。
+
+**`remove()`**  
+将当前程程局部变量的值删除。
+```
+/**
+    * Removes the current thread's value for this thread-local
+    * variable.  If this thread-local variable is subsequently
+    * {@linkplain #get read} by the current thread, its value will be
+    * reinitialized by invoking its {@link #initialValue} method,
+    * unless its value is {@linkplain #set set} by the current thread
+    * in the interim.  This may result in multiple invocations of the
+    * {@code initialValue} method in the current thread.
+    *
+    * @since 1.5
+    */
+    public void remove() {
+        ThreadLocalMap m = getMap(Thread.currentThread());
+        if (m != null)
+            m.remove(this);
+    }
+```
+该方法的目的是减少内存的占用。当然，我们不需要显示调用该方法，因为一个线程结束后，它所对应的局部变量就会被垃圾回收。
 
 
+## `ThreadLocal`为什么会内存泄漏
+---
+前面提到每个`Thread`都有一个`ThreadLocal.ThreadLocalMap`的map，该map的key为`ThreadLocal`实例，它为一个弱引用，我们知道弱引用有利于GC回收。当`ThreadLocal的key == null`时，GC就会回收这部分空间，但是value却不一定能够被回收，因为他还与Current Thread存在一个强引用关系，如下：
 
+![PNG](images/5-threadlocal-2.png)
 
+由于存在这个强引用关系，会导致value无法回收。如果这个线程对象不会销毁那么这个强引用关系则会一直存在，就会出现内存泄漏情况。所以说只要这个线程对象能够及时被GC回收，就不会出现内存泄漏。如果碰到线程池，那就更坑了。
 
-[参考](https://mp.weixin.qq.com/s/O7LrEgDKZsHGi0y69xowkg)
+**那么要怎么避免这个问题呢？**  
+在前面提过，在`ThreadLocalMap`中的`setEntry()`、`getEntry()`，如果遇到`key == null`的情况，会对`value`设置为`null`。当然我们也可以显示调用`ThreadLocal的remove()`方法进行处理。
+
+## 总结
+---
++ ThreadLocal 不是用于解决共享变量的问题的，也不是为了协调线程同步而存在，而是为了方便每个线程处理自己的状态而引入的一个机制。这点至关重要。
++ 每个Thread内部都有一个ThreadLocal.ThreadLocalMap类型的成员变量，该成员变量用来存储实际的ThreadLocal变量副本。
++ ThreadLocal并不是为线程保存对象的副本，它仅仅只起到一个索引的作用。它的主要木得视为每一个线程隔离一个类的实例，这个实例的作用范围仅限于线程内部。

@@ -43,3 +43,5 @@
 * [分布式](distribute/introduction.md)
   * [分布式事务](distribute/asked_distribute_transaction_give_this.md)
   <!-- * [分布式事务，原来可以这么玩](mysql/) -->
+* [其它](other/introduction.md)
+  * [Linux查看端口占用情况](other/linux-port-use.md)
