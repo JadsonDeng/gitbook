@@ -16,6 +16,8 @@
   * [Java虚拟机3：Java GC如何判断对象是否为垃圾?](java/jvm3-garbage-decide.md)
   * [Java虚拟机4: 分代垃圾回收](java/jvm4-gc-generation.md)
   * [ThreadLocal](java/5-threadlocal.md)
+* [spring](spring/introduction.md)
+  * [Spring1: IOC 之深入理解 Spring IoC](spring/spring1-IOC1.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
