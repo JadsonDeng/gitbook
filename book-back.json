@@ -1,6 +1,6 @@
 {
 	"author":"邓军振",
-	"plugins": ["donate","navigator"],
+	"plugins": ["splitter","toggle-chapters","donate","navigator"],
 	"pluginsConfig": {
     "donate": {
         "wechat": "http://r.photo.store.qq.com/psb?/V13YsMXk2HrQPW/i7DU81kX*K*jPUqjeaRWXoecAs1PwqCLGahEogbX5xQ!/r/dDIBAAAAAAAA",
