@@ -19,6 +19,7 @@
 * [spring](spring/introduction.md) 
   * [Spring1: IOC 之深入理解 Spring IoC](spring/spring1-IOC1.md)
   * [Spring2-IOC之Spring统一资源加载策略](spring/spring2-ioc2-resourceloader.md)
+  * [Spring3-IOC之加载bean](spring/spring3-ioc3-beanload.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
