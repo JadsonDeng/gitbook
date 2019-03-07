@@ -23,6 +23,7 @@
   * [Spring4-获取验证模型](spring/spring4-validation-model.md)
   * [Spring5-IOC之注册IOC之注册BeanDefinition](spring/spring5-ioc4-beandefinition.md)
   + [Spring6: IOC之获取Documment对象](spring/spring6-ioc5-document.md)
+  + [Spring7: IOC之解析Bean：解析import标签](spring/spring7-ioc6-import.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
