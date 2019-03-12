@@ -72,7 +72,7 @@ protected void importBeanDefinitionResource(Element ele) {
     // 绝对路径
     if (absoluteLocation) {
         try {
-            // 直接根据地质加载相应的配置文件
+            // 直接根据地址加载相应的配置文件
             int importCount = getReaderContext().getReader().loadBeanDefinitions(location, actualResources);
             if (logger.isDebugEnabled()) {
                 logger.debug("Imported " + importCount + " bean definitions from URL location [" + location + "]");
@@ -84,7 +84,7 @@ protected void importBeanDefinitionResource(Element ele) {
         }
     }
     else {
-        // 相对路径则根据相应的地质计算出绝对路径地址
+        // 相对路径则根据相应的地址计算出绝对路径地址
         try {
             int importCount;
             Resource relativeResource = getReaderContext().getResource().createRelative(location);
