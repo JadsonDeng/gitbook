@@ -25,6 +25,7 @@
   * [Spring6: IOC之获取Documment对象](spring/spring6-ioc6-document.md)
   * [Spring7: IOC之解析Bean：解析import标签](spring/spring7-ioc7-import.md)
   * [Spring8: IOC之解析Bean标签：开启解析进程](spring/spring8-ioc8-bean-resolve1.md)
+  * [Spring9: IOC之解析Bean标签：BeanDefinition](spring/spring9-ioc8-bean-resolve2.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
