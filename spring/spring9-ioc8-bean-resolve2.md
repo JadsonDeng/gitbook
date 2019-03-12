@@ -1,4 +1,4 @@
-# Spring8: IOC 之解析 bean 标签：BeanDefinition
+# Spring9: IOC 之解析 bean 标签：BeanDefinition
 ---
 前面历经千辛万苦终于到达解析 bean 标签步骤来了，解析 bean 标签的过程其实就是构造一个 BeanDefinition 对象的过程，<bean> 元素标签拥有的配置属性，BeanDefinition 均提供了相应的属性，与之一一对应。所以我们有必要对 BeanDefinition 有一个整体的认识。
 
