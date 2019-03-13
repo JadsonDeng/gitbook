@@ -1,4 +1,4 @@
-# Spring9: IOC 之解析 bean 标签：meta、lookup-method、replace-method
+# Spring10: IOC 之解析 bean 标签：meta、lookup-method、replace-method
 ---
 在[上篇](spring9-ioc9-bean-resolve2.md)文章中已经完成了对 Bean 标签属性的解析工作，这篇博文开始分析子元素的解析。完成 Bean 标签基本属性解析后，会依次调用 `parseMetaElements()`、`parseLookupOverrideSubElements()`、`parseReplacedMethodSubElements()` 对子元素 meta、`lookup-method`、`replace-method` 完成解析。三个子元素的作用如下：
 
