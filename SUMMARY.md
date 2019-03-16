@@ -27,7 +27,7 @@
   * [Spring8: IOC之解析Bean标签：开启解析进程](spring/spring8-ioc8-bean-resolve1.md)
   * [Spring9: IOC之解析Bean标签：BeanDefinition](spring/spring9-ioc9-bean-resolve2.md)
   * [Spring10: IOC 之解析bean标签：meta、lookup-method、replace-method](spring/spring10-ioc10-bean-resolve3.md)
-  * [Spring11: IOC 之解析自定义标签](spring/spring11-ioc11-bean-resolve4.md)
+  * [Spring11: IOC 之解析 bean 标签：constructor-arg、property 子元素](spring/spring11-ioc11-bean-resolve4-construct.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
