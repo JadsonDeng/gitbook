@@ -1,6 +1,6 @@
 # Spring11: IOC 之解析 bean 标签：constructor-arg、property 子元素
 ---
-上篇博客[IOC 之解析 bean 标签：meta、lookup-method、replace-method](spring11-ioc11-bean-resolve4-construct.md)分析了 meta 、 lookup-method、replace-method 三个子元素,这篇文章分析 constructor-arg 、property、qualifier 三个子元素。
+上篇博客[IOC 之解析 bean 标签：meta、lookup-method、replace-method](spring11-ioc11-bean-resolve4-construct.md)分析了 `meta `、 `lookup-method`、`replace-method` 三个子元素,这篇文章分析 `constructor-arg` 、`property`、`qualifier` 三个子元素。
 
 
 ## constructor-arg 子元素
@@ -30,7 +30,7 @@ public class StudentService {
 </bean>
 ```
 
-StudentService 定义一个构造函数，配置文件中使用 constructor-arg 元素对其配置，该元素可以实现对 StudentService 自动寻找对应的构造函数，并在初始化的时候将值当做参数进行设置。parseConstructorArgElements() 方法完成 constructor-arg 子元素的解析。
+`StudentService` 定义一个构造函数，配置文件中使用 `constructor-arg` 元素对其配置，该元素可以实现对 `StudentService` 自动寻找对应的构造函数，并在初始化的时候将值当做参数进行设置。`parseConstructorArgElements()` 方法完成 `constructor-arg` 子元素的解析。
 ```
 public void parseConstructorArgElements(Element beanEle, BeanDefinition bd) {
     NodeList nl = beanEle.getChildNodes();
@@ -43,7 +43,7 @@ public void parseConstructorArgElements(Element beanEle, BeanDefinition bd) {
 }
 ```
 
-遍历所有子元素，如果为 constructor-arg 则调用 parseConstructorArgElement() 进行解析。
+遍历所有子元素，如果为 `constructor-arg` 则调用 `parseConstructorArgElement()` 进行解析。
 ```
 public void parseConstructorArgElement(Element ele, BeanDefinition bd) {
     // 提取 index、type、name 属性值
@@ -117,13 +117,13 @@ public void parseConstructorArgElement(Element ele, BeanDefinition bd) {
 ```
 
 首先获取 index、type、name 三个属性值，然后根据是否存在 index 来区分。其实两者逻辑都差不多，总共分为如下几个步骤（以有 index 为例）：
-+ 构造 ConstructorArgumentEntry 对象并将其加入到 ParseState 队列中。ConstructorArgumentEntry 表示构造函数的参数。
++ 构造 `ConstructorArgumentEntry` 对象并将其加入到 `ParseState` 队列中。`ConstructorArgumentEntry` 表示构造函数的参数。
 
-+ 调用 parsePropertyValue() 解析 constructor-arg 子元素，返回结果值
++ 调用 `parsePropertyValue()` 解析 `constructor-arg` 子元素，返回结果值
 
-+ 根据解析的结果值构造 ConstructorArgumentValues.ValueHolder 实例对象
++ 根据解析的结果值构造 `ConstructorArgumentValues.ValueHolder` 实例对象
 
-+ 将 type、name 封装到 ConstructorArgumentValues.ValueHolder 中，然后将 ValueHolder 实例对象添加到 indexedArgumentValues 中。
++ 将 type、name 封装到 `ConstructorArgumentValues.ValueHolder` 中，然后将 `ValueHolder` 实例对象添加到 `indexedArgumentValues` 中。
 
 无 index 的处理逻辑差不多，只有几点不同：构造 ConstructorArgumentEntry 对象时是调用无参构造函数；最后是将 ValueHolder 实例添加到 genericArgumentValues 中。
 
@@ -194,12 +194,12 @@ public Object parsePropertyValue(Element ele, BeanDefinition bd, @Nullable Strin
 }
 ```
 
-+ 提取 constructor-arg 子元素的 ref 和 value 的属性值，对其进行判断，以下两种情况是不允许存在的
++ 提取 `constructor-arg` 子元素的 ref 和 value 的属性值，对其进行判断，以下两种情况是不允许存在的
 > ref 和 value 属性同时存在  
 > 存在 ref 或者 value 且又有子元素
-+ 若存在 ref 属性，则获取其值并将其封装进 RuntimeBeanReference 实例对象中
-+ 若存在 value 属性，则获取其值并将其封装进 TypedStringValue 实例对象中
-+ 如果子元素不为空，则调用 parsePropertySubElement() 进行子元素进一步处理
++ 若存在 ref 属性，则获取其值并将其封装进 `RuntimeBeanReference` 实例对象中
++ 若存在 value 属性，则获取其值并将其封装进 `TypedStringValue` 实例对象中
++ 如果子元素不为空，则调用 `parsePropertySubElement()` 进行子元素进一步处理
 
 对于 constructor-arg 子元素的嵌套子元素，需要调用 parsePropertySubElement() 进一步处理。
 ```
@@ -287,7 +287,7 @@ public Object parsePropertySubElement(Element ele, @Nullable BeanDefinition bd, 
 </bean>
 ```
 
-对于 property 子元素的解析，Spring 调用 parsePropertyElements()。如下：
+对于 `property` 子元素的解析，Spring 调用 `parsePropertyElements()`。如下：
 ```
 public void parsePropertyElements(Element beanEle, BeanDefinition bd) {
     NodeList nl = beanEle.getChildNodes();
@@ -300,7 +300,7 @@ public void parsePropertyElements(Element beanEle, BeanDefinition bd) {
 }
 ```
 
-和 constructor-arg 子元素差不多，同样是提取所有的 property 的子元素，然后调用 parsePropertyElement() 进行分析。
+和 `constructor-arg` 子元素差不多，同样是提取所有的 `property` 的子元素，然后调用 `parsePropertyElement()` 进行分析。
 ```
 public void parsePropertyElement(Element ele, BeanDefinition bd) {
     // 获取 name 属性
@@ -332,4 +332,4 @@ public void parsePropertyElement(Element ele, BeanDefinition bd) {
 }
 ```
 
-与解析 constructor-arg 子元素步骤差不多。调用 parsePropertyValue() 解析子元素属性值，然后根据该值构造 PropertyValue 实例对象并将其添加到 BeanDefinition 中的 MutablePropertyValues 中。
+与解析 `constructor-arg` 子元素步骤差不多。调用 `parsePropertyValue()` 解析子元素属性值，然后根据该值构造 `PropertyValue` 实例对象并将其添加到 `BeanDefinition` 中的 `MutablePropertyValues` 中。
