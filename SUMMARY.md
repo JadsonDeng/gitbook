@@ -31,6 +31,7 @@
   * [Spring12: IOC 之解析bean标签：解析自定义标签](spring/spring12-ioc12-bean-resolve5-custom1.md)
   * [Spring13: IOC 之解析自定义标签](spring/spring13-ioc13-bean-resolve6-custom2.md)
   * [Spring14: IOC 之注册解析的 BeanDefinition](spring/spring14-ioc14-bean-regist-beandefination.md)
+  * [Spring15: IOC 之 IOC 初始化总结](spring/spring15-ioc15-summary.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
