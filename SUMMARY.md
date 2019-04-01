@@ -35,6 +35,7 @@
   * [Spring16: IOC 之开启 bean 的加载](spring/spring16-ioc16-beanload-start.md)
   * [Spring17: IOC 之从单例缓存中获取单例 bean](spring/spring17-ioc17-getsingle-bean.md)
   * [Spring18: IOC 之parentBeanFactory 与依赖处理](spring/spring18-ioc18-parentbeanfactory.md)
+  * [Spring19: IOC 之分析各 scope 的 bean 创建](spring/spring19-ioc19-scope-bean.md)
 * [缓存](cache/introduction.md)
   * [Redis1: 基础数据结构](cache/redis1-datatype.md)
   * [Redis2: 分布式锁](cache/redis2-distributelock.md)
